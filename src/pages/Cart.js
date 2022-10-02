@@ -5,6 +5,14 @@ import Footer from '../components/Footer';
 import { Add, Remove } from '@mui/icons-material';
 import { mobile } from '../components/Responsive';
 import { useSelector } from 'react-redux';
+import StripeCheckout from 'react-stripe-checkout';
+import { useState } from 'react';
+import { useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+
+const KEY =
+  'pk_test_51LicViKjUX3LGveaK186mcYnd7bK0mek6SkeGao63UGgZoWQ2rbKiSwBHcaSBNdsZ3vC3yExGtXj59c7kevNAfRl00aQFn2s1x';
 
 const Container = styled.div`
   padding: 20px;
@@ -173,6 +181,26 @@ const Button = styled.button`
 
 const Cart = () => {
   const cart = useSelector((state) => state.cart);
+  const [stripeToken, setStripeToken] = useState(null);
+  const navigate = useNavigate();
+
+  const onToken = (token) => {
+    setStripeToken(token);
+  };
+
+  useEffect(() => {
+    const makeRequest = async () => {
+      const res = await axios.post(
+        'http://localhost:3000/api/checkout/payment',
+        {
+          tokenId: stripeToken.id,
+          amount: parseInt(cart.total) * 100,
+        }
+      );
+      navigate('/success', { data: res.data });
+    };
+    stripeToken && makeRequest();
+  }, [stripeToken, cart.total, navigate]);
 
   return (
     <Container>
@@ -237,7 +265,16 @@ const Cart = () => {
               <SummaryItemText>Total</SummaryItemText>
               <SummaryItemPrice>${cart.total}</SummaryItemPrice>
             </SummaryItem>
-            <Button>CHECKOUT NOW</Button>
+            <StripeCheckout
+              name="REKT"
+              image="https://images.unsplash.com/photo-1635405074683-96d6921a2a68?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1469&q=80"
+              billingAddress
+              shippingAddress
+              description={`Your total is $${cart.total}`}
+              amount={cart.total * 100}
+              token={onToken}
+              stripeKey={KEY}
+            />
           </Summary>
         </Bottom>
       </Wrapper>

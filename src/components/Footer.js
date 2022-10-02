@@ -6,6 +6,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PhoneIphoneIcon from '@mui/icons-material/PhoneIphone';
 import EmailIcon from '@mui/icons-material/Email';
 import { mobile } from './Responsive';
+import { Link } from 'react-router-dom';
 
 const Container = styled.div`
   display: flex;
@@ -109,7 +110,9 @@ const Footer = () => {
         <Title>Useful Links</Title>
         <List>
           <ListItem>Home</ListItem>
-          <ListItem>Cart</ListItem>
+          <Link to="/cart" style={{ textDecoration: 'none' }}>
+            <ListItem>Cart</ListItem>
+          </Link>
           <ListItem>Order Tracking</ListItem>
           <ListItem>Wishlist</ListItem>
         </List>

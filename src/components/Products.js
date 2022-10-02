@@ -41,7 +41,7 @@ const Products = (props) => {
           )
         )
       );
-  }, [category, filters]);
+  }, [category, filters, products]);
 
   useEffect(() => {
     if (sort === 'newest') {
