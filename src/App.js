@@ -14,7 +14,6 @@ const App = () => {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Home />}></Route>
-        <Route path="/success" element={<Success />}></Route>
         <Route
           path="/register"
           element={user ? <Navigate replace to="/" /> : <Register />}
@@ -26,6 +25,7 @@ const App = () => {
         <Route path="/products/:category" element={<ProductList />}></Route>
         <Route path="/product/:id" element={<Product />}></Route>
         <Route path="/cart" element={<Cart />}></Route>
+        <Route path="/success" element={<Success />}></Route>
         <Route path="*" element={<NotFound />}></Route>
       </Routes>
     </BrowserRouter>

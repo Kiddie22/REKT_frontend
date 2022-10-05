@@ -190,14 +190,20 @@ const Cart = () => {
 
   useEffect(() => {
     const makeRequest = async () => {
-      const res = await axios.post(
-        'http://localhost:3000/api/checkout/payment',
-        {
-          tokenId: stripeToken.id,
-          amount: parseInt(cart.total) * 100,
-        }
-      );
-      navigate('/success', { data: res.data });
+      try {
+        const res = await axios.post(
+          'http://localhost:3000/api/checkout/payment',
+          {
+            tokenId: stripeToken.id,
+            amount: parseInt(cart.total) * 100,
+          }
+        );
+        navigate('/success', {
+          state: { stripeData: res.data, prodcuts: cart },
+        });
+      } catch (error) {
+        console.log(error);
+      }
     };
     stripeToken && makeRequest();
   }, [stripeToken, cart.total, navigate]);
